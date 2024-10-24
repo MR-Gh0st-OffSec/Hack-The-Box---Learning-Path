@@ -60,6 +60,3 @@ Here are some helpful resources to aid your learning:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
----
-
-Feel free to edit or expand any section to better fit your project or include any additional information that you think is important!

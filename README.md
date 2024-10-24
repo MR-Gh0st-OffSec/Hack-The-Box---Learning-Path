@@ -55,16 +55,6 @@ Here are some helpful resources to aid your learning:
 - [Web Security Academy](https://portswigger.net/web-security)
 - [Cybersecurity Blogs and Tutorials](https://www.cybersecurity-guide.org)
 
-## Contributing
-
-Contributions are welcome! If you'd like to add resources, modules, or improvements, please create a pull request. 
-
-### Steps to Contribute:
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/your-feature`).
-3. Make your changes and commit them (`git commit -m "Add your feature"`).
-4. Push to the branch (`git push origin feature/your-feature`).
-5. Create a pull request.
 
 ## License
 

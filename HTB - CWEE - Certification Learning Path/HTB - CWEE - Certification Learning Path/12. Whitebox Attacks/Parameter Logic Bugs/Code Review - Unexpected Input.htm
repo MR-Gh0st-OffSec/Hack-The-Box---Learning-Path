@@ -1,0 +1,2060 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Parameter Logic Bugs</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+<meta content="Themesbrand" name="author" />
+<link rel="shortcut icon" href="/images/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<link rel="mask-icon" href="/images/safari-pinned-tab.svg">
+<link rel="preload" as="style" href="./css/bootstrap-dark-37a520b2.css" />
+<link rel="preload" as="style" href="./css/app-dark-341cd2e1.css" />
+<link rel="preload" as="style" href="./css/icons-541b9943.css" />
+<link rel="preload" as="style" href="./css/prism-8ad01d51.css" />
+<link rel="stylesheet" href="./css/bootstrap-dark-37a520b2.css" />
+<link rel="stylesheet" href="./css/app-dark-85a271d1.css" />
+<link rel="stylesheet" href="./css/icons-541b9943.css" />
+<link rel="stylesheet" href="./css/prism-8ad01d51.css" />
+
+<link rel="preload" as="style" href="./css/app-dark-341cd2e1.css" />
+<link rel="preload" as="style" href="./css/icons-541b9943.css" />
+<link rel="preload" as="style" href="./css/prism-8ad01d51.css" />
+<link rel="stylesheet" href="./css/bootstrap-dark-37a520b2.css" />
+<link rel="stylesheet" href="./css/app-dark-85a271d1.css" />
+<link rel="stylesheet" href="./css/icons-541b9943.css" />
+<link rel="stylesheet" href="./css/prism-8ad01d51.css" />
+
+<link rel="preload" as="style" href="./css/app-dark-341cd2e1.css" />
+<link rel="preload" as="style" href="./css/icons-541b9943.css" />
+<link rel="preload" as="style" href="./css/prism-8ad01d51.css" />
+<link rel="stylesheet" href="./css/bootstrap-dark-37a520b2.css" />
+<link rel="stylesheet" href="./css/app-dark-85a271d1.css" />
+<link rel="stylesheet" href="./css/icons-541b9943.css" />
+<link rel="stylesheet" href="./css/prism-8ad01d51.css" />
+
+<link href=./assets/libs/toastr/toastr.min.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://use.typekit.net/ryt3opf.css">
+<link rel="stylesheet" href="https://kit.fontawesome.com/8161086d56.css" crossorigin="anonymous">
+<script>
+    !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var key=analytics.methods[e];analytics[key]=analytics.factory(key)}analytics.load=function(key,e){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.src="https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n);analytics._loadOptions=e};analytics._writeKey="eLzeD0QoARKZ42pc8AGEUYpcFLpYkf0I";analytics.SNIPPET_VERSION="4.13.2";
+            analytics.load("eLzeD0QoARKZ42pc8AGEUYpcFLpYkf0I");
+                                            properties = {"platform":"Academy","platform_version":"V1","module_id":239,"module_name":"Parameter Logic Bugs","module_difficulty":"Hard","section_id":2596,"section_title":"Code Review - Unexpected Input"};
+                                    analytics.page(
+                "Module",
+                properties
+            );
+                                }
+    }();
+</script>
+<style>
+    .website-screenshot-url {
+        height: 22px;
+        cursor: text;
+        padding-left: 10px;
+    }
+
+    .iterminal {
+        position: fixed;
+        bottom: 0;
+        z-index: 100;
+        width: 100%;
+        left: 0;
+    }
+
+
+    .page-head {
+        display: none;
+    }
+
+    .btn-circle {
+        width: 25px;
+        height: 25px;
+        padding: 6px 0px;
+        border-radius: 15px;
+        text-align: center;
+        font-size: 9px;
+        line-height: 1.42857;
+    }
+</style>
+<script src="https://www.google.com/recaptcha/api.js?render=6LeI6LsaAAAAAKgdStgBC6B4UVbXlpYNaYGN46Ah"></script>
+</head>
+<body data-layout="detached" data-topbar="colored">
+<div id="global-alert-notification" class="global-alert-banner-container">
+<div class="alert-notification-banner global danger">
+<div class="d-flex justify-content-between w-100 h-100 alert-body">
+<div class="d-flex align-items-center justify-content-center">
+<div class="danger global-icon-wrapper align-self-center">
+<i class="fa fa-exclamation-circle"></i>
+</div>
+<p class="alert-body-content d-flex flex-column justify-content-center mb-0">
+<span class="title danger">We are currently facing some issues with Pwnbox spawning</span>
+<span class="message danger">The appropriate team is currently investigating the issue</span>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="container-fluid">
+<div id="layout-wrapper" class="global-alert-visible">
+<header id="page-topbar" class="global-alert-visible">
+<div class="navbar-header">
+<div class="container-fluid">
+<div class="d-flex align-items-center justify-content-between">
+<div class="d-flex align-items-center">
+<div class="navbar-brand-box">
+<a href="https://academy.hackthebox.com/dashboard" class="logo">
+<span class="logo-sm">
+<img src="/images/new-logo-htb.svg" alt height="30">
+</span>
+<span class="logo-md">
+<img src="/images/logo.svg" alt height="30">
+</span>
+<span class="logo-lg">
+<img src="/images/logo.svg" alt height="36">
+</span>
+</a>
+</div>
+<div class="d-flex align-items-center">
+<button type="button" class="btn btn-sm font-size-16 header-item toggle-btn waves-effect" id="vertical-menu-btn">
+<i class="fa fa-fw fa-bars"></i>
+</button>
+</div>
+<div class="topnav">
+<nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+<div class="collapse navbar-collapse" id="topnav-menu-content">
+<ul class="navbar-nav active">
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/dashboard"><i class="mdi mdi-monitor-dashboard"></i> Dashboard</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/modules"><i class="mdi mdi-book-open"></i>
+Modules</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/paths"><i class="mdi mdi-map-marker-path"></i> Paths</a>
+</li>
+</ul>
+</div>
+</nav>
+</div>
+</div>
+<div class="float-right">
+<div class="dropdown d-none d-lg-inline-block ml-1">
+<a href="https://academy.hackthebox.com/billing">
+<button type="button" class="btn btn-extra-light">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;Purchase Cubes
+</button>
+</a>
+</div>
+<div class="dropdown d-none d-lg-inline-block ml-1">
+<button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
+<i class="mdi mdi-fullscreen fullscreen-icon"></i>
+</button>
+</div>
+<div class="dropdown d-inline-block">
+<button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<img class="rounded-circle header-profile-user" src="https://www.gravatar.com/avatar/802f8c37a075fbd26b2e352ee91ecd69?d=robohash" alt="Header Avatar">
+<span class="d-none d-xl-inline-block ml-1">lmaodedlol</span>
+<i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+</button>
+<div class="dropdown-menu dropdown-menu-right">
+<a class="dropdown-item" href="https://academy.hackthebox.com/billing"><i class="bx bx-wallet font-size-16 align-middle mr-1"></i> Billing</a>
+<a class="dropdown-item d-block" href="https://academy.hackthebox.com/settings"><i class="bx bx-wrench font-size-16 align-middle mr-1"></i> Settings</a>
+<a class="dropdown-item d-block" href="https://academy.hackthebox.com/vpn"><i class="bx bx-server font-size-16 align-middle mr-1"></i> VPN Settings</a>
+<a class="dropdown-item d-block" href="https://academy.hackthebox.com/htb-account-settings"><i class="bx bx-server font-size-16 align-middle mr-1"></i> HTB Account Settings</a>
+<div class="dropdown-divider"></div>
+<form method="POST" action="https://academy.hackthebox.com/logout"> <input type="hidden" name="_token" value="mEPihovH3AUDVPXZwiGGTIpt8k6l1SJGEqkDPsXt" autocomplete="off"> <a class="dropdown-item text-danger log-out" href="#"><i class="bx bx-power-off font-size-16 align-middle mr-1 text-danger"></i> Logout</a>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class="vertical-menu overflow-hidden  d-lg-none   global-alert-visible ">
+<div class="vertical-menu-overlay"></div>
+<div class="h-100 overflow-auto">
+<div class="user-wid text-center py-4">
+<div class="user-img">
+<img src="https://www.gravatar.com/avatar/802f8c37a075fbd26b2e352ee91ecd69?d=robohash" alt class="avatar-md mx-auto rounded-circle">
+</div>
+<div class="mt-3">
+<p class="text-dark mb-0 font-weight-medium font-size-16">lmaodedlol</p>
+<p class="text-body mt-1 mb-1">
+Platinum
+</p>
+<p>
+<span class="custom-badge custom-badge-soft-secondary" data-toggle="tooltip" data-title="Cubes">
+<i class="fad fa-cube text-success mr-1"></i>
+<span class="cubeBalance">
+630
+</span>
+</span>
+</p>
+</div>
+</div>
+<div id="sidebar-menu">
+<ul class="metismenu list-unstyled" id="side-menu">
+<li class="menu-title">Learn</li>
+<li><a class="navDashboard" href="https://academy.hackthebox.com/dashboard"><i class="mdi mdi-monitor-dashboard"></i> Dashboard</a></li>
+<li>
+<a class="navDashboard" href="https://academy.hackthebox.com/exams"><i class="mdi mdi-certificate"></i>
+Exams</a></li>
+<li>
+<a class="navModules" href="javascript: void(0);" class="has-arrow waves-effect">
+<i class="mdi mdi-book-open"></i>
+<span>Modules</span>
+</a>
+<ul class="sub-menu mm-collapse" aria-expanded="false">
+<li><a href="https://academy.hackthebox.com/modules"><i class="mdi mdi-book-open"></i> All Modules</a>
+</li>
+<li>
+<a href="https://academy.hackthebox.com/modules/inprogress"><i class="mdi mdi-progress-upload"></i>
+In-Progress Modules</a></li>
+<li><a href="https://academy.hackthebox.com/modules/locked"><i class="mdi mdi-account-arrow-left-outline"></i> Available
+Modules</a>
+</li>
+<li>
+<a href="https://academy.hackthebox.com/modules/unlocked"><i class="mdi mdi-account-check-outline"></i>
+Owned
+Modules</a></li>
+<li>
+<a href="https://academy.hackthebox.com/modules/changelog"><i class="mdi mdi-playlist-check"></i>
+Change Log</a></li>
+</ul>
+</li>
+<li class="pathsLink">
+<a class="navPaths" href="javascript: void(0);" class="has-arrow waves-effect">
+<i class="mdi mdi-map-marker-path"></i>
+<span>Paths</span>
+</a>
+<ul class="sub-menu mm-collapse" aria-expanded="false">
+<li class="skillPathsLink"><a href="https://academy.hackthebox.com/paths"><i class="mdi mdi-chart-line-variant"></i> Skill Paths</a></li>
+<li class="jobRolePathsLink"><a href="https://academy.hackthebox.com/paths/jobrole"><i class="mdi mdi-briefcase"></i> Job Role Paths</a></li>
+</ul>
+</li>
+<li>
+<a class="navDashboard" href="https://academy.hackthebox.com/academy-relations"><i class="mdi mdi-sitemap"></i>
+Academy x HTB Labs</a>
+</li>
+<li class="menu-title">My Achievements</li>
+<li>
+<a class="navDashboard" href="https://academy.hackthebox.com/my-certificates"><i class="mdi mdi-certificate"></i>
+My Certificates </a></li>
+<li>
+<li>
+<a class="navDashboard" href="https://academy.hackthebox.com/my-badges"><i class="mdi mdi-trophy"></i>
+My Badges </a>
+</li>
+<li>
+<li class="menu-title">Referrals</li>
+<li>
+<a class="navDashboard" href="https://academy.hackthebox.com/referral">
+<i class="mdi mdi-gift"></i> Invite friends
+<span class="badge mx-3 bg-success text-light font-size-11">NEW</span>
+</a>
+<li>
+<li>
+<li class="menu-title">Get Help</li>
+<li>
+<a class="navSupport" href="http://help.hackthebox.eu/" rel="noopener nofollow norefferer" target="_blank"><i class="mdi mdi-help-box"></i>Help Center</a></li>
+<li><a class="navSupport" data-toggle="tooltip" href="https://academy.hackthebox.com/faq"><i class="mdi mdi-help-circle"></i> FAQ</a></li>
+<li><a class="navSupport" href="https://discord.gg/hackthebox" rel="noopener nofollow norefferer" target="_blank"><i class="mdi mdi-discord"></i>
+Discord</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="vertical-menu overflow-hidden  d-lg-none   global-alert-visible ">
+<div class="vertical-menu-overlay"></div>
+<div class="h-100 overflow-auto">
+<div class="user-wid text-center py-4">
+<div class="user-img">
+<img src="https://www.gravatar.com/avatar/802f8c37a075fbd26b2e352ee91ecd69?d=robohash" alt class="avatar-md mx-auto rounded-circle">
+</div>
+<div class="mt-3">
+<p class="text-dark mb-0 font-weight-medium font-size-16">lmaodedlol</p>
+<p class="text-body mt-1 mb-1">
+Platinum
+</p>
+<p>
+<span class="custom-badge custom-badge-soft-secondary" data-toggle="tooltip" data-title="Cubes">
+<i class="fad fa-cube text-success mr-1"></i>
+<span class="cubeBalance">
+630
+</span>
+</span>
+</p>
+</div>
+</div>
+<div id="sidebar-menu">
+<ul class="metismenu list-unstyled" id="side-menu">
+<li class="menu-title">Learn</li>
+<li><a class="navDashboard" href="https://academy.hackthebox.com/dashboard"><i class="mdi mdi-monitor-dashboard"></i> Dashboard</a></li>
+<li>
+<a class="navDashboard" href="https://academy.hackthebox.com/exams"><i class="mdi mdi-certificate"></i>
+Exams</a></li>
+<li>
+<a class="navModules" href="javascript: void(0);" class="has-arrow waves-effect">
+<i class="mdi mdi-book-open"></i>
+<span>Modules</span>
+</a>
+<ul class="sub-menu mm-collapse" aria-expanded="false">
+<li><a href="https://academy.hackthebox.com/modules"><i class="mdi mdi-book-open"></i> All Modules</a>
+</li>
+<li>
+<a href="https://academy.hackthebox.com/modules/inprogress"><i class="mdi mdi-progress-upload"></i>
+In-Progress Modules</a></li>
+<li><a href="https://academy.hackthebox.com/modules/locked"><i class="mdi mdi-account-arrow-left-outline"></i> Available
+Modules</a>
+</li>
+<li>
+<a href="https://academy.hackthebox.com/modules/unlocked"><i class="mdi mdi-account-check-outline"></i>
+Owned
+Modules</a></li>
+<li>
+<a href="https://academy.hackthebox.com/modules/changelog"><i class="mdi mdi-playlist-check"></i>
+Change Log</a></li>
+</ul>
+</li>
+<li class="pathsLink">
+<a class="navPaths" href="javascript: void(0);" class="has-arrow waves-effect">
+<i class="mdi mdi-map-marker-path"></i>
+<span>Paths</span>
+</a>
+<ul class="sub-menu mm-collapse" aria-expanded="false">
+<li class="skillPathsLink"><a href="https://academy.hackthebox.com/paths"><i class="mdi mdi-chart-line-variant"></i> Skill Paths</a></li>
+<li class="jobRolePathsLink"><a href="https://academy.hackthebox.com/paths/jobrole"><i class="mdi mdi-briefcase"></i> Job Role Paths</a></li>
+</ul>
+</li>
+<li>
+<a class="navDashboard" href="https://academy.hackthebox.com/academy-relations"><i class="mdi mdi-sitemap"></i>
+Academy x HTB Labs</a>
+</li>
+<li class="menu-title">My Achievements</li>
+<li>
+<a class="navDashboard" href="https://academy.hackthebox.com/my-certificates"><i class="mdi mdi-certificate"></i>
+My Certificates </a></li>
+<li>
+<li>
+<a class="navDashboard" href="https://academy.hackthebox.com/my-badges"><i class="mdi mdi-trophy"></i>
+My Badges </a>
+</li>
+<li>
+<li class="menu-title">Referrals</li>
+<li>
+<a class="navDashboard" href="https://academy.hackthebox.com/referral">
+<i class="mdi mdi-gift"></i> Invite friends
+<span class="badge mx-3 bg-success text-light font-size-11">NEW</span>
+</a>
+<li>
+<li>
+<li class="menu-title">Get Help</li>
+<li>
+<a class="navSupport" href="http://help.hackthebox.eu/" rel="noopener nofollow norefferer" target="_blank"><i class="mdi mdi-help-box"></i>Help Center</a></li>
+<li><a class="navSupport" data-toggle="tooltip" href="https://academy.hackthebox.com/faq"><i class="mdi mdi-help-circle"></i> FAQ</a></li>
+<li><a class="navSupport" href="https://discord.gg/hackthebox" rel="noopener nofollow norefferer" target="_blank"><i class="mdi mdi-discord"></i>
+Discord</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="main-content">
+<div class="page-content">
+<div class="iterminal d-none">
+<div id="appVue"></div>
+</div>
+<div class="row">
+<div class="col-12">
+<div class="page-title-box d-flex align-items-center justify-content-between">
+<h4 class="page-title mb-0 font-size-18 letter-spacing-1-2">Parameter Logic Bugs &nbsp;<i style="cursor:pointer;" data-module-id="239" data-toggle="tooltip" data-title="Toggle To-Do" class="favouriteBtn  fa-regular  fa-heart text-danger"></i>
+</h4>
+<div class="page-title-right">
+<ol class="breadcrumb m-0">
+<li class="breadcrumb-item"><a href="javascript: void(0);">Page 10</a></li>
+<li class="breadcrumb-item active">Code Review - Unexpected Input</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="row justify-content-xl-center">
+<div class="col-md-12 col-xl-9 col-xxl-7">
+<div class="training-module">
+<h1>Code Review - Unexpected Input</h1>
+<hr/>
+<p>In the previous sections, we understood how API routes are mapped and linked to functions in our NodeJS app. So, let's focus in this section on identifying all functions that accept user input through GET and POST requests. We will then filter out any type-safe functions or ones using proper user input validation, and will focus on the remaining ones in our <code>Local Testing</code> phase in the next sections.</p>
+<h2>Identifying Functions with User Input</h2>
+<p>If we search the code base for functions containing either GET parameters (<code>req.params</code>) or POST parameters (<code>req.body</code>), we will reduce our scope to the following 18 functions (sorted by search results order in VSCode):</p>
+<table>
+<thead>
+<tr>
+<th align="left"><strong>File</strong></th>
+<th align="left"><strong>Function(s)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>coupon-controllers.js</code></td>
+<td align="left"><code>applyCoupon()</code></td>
+</tr>
+<tr>
+<td align="left"><code>exam-controllers.js</code></td>
+<td align="left"><code>getExamById()</code>, <code>getExamAvailability()</code>, <code>bookExam()</code>, <code>getExamContent()</code></td>
+</tr>
+<tr>
+<td align="left"><code>modules-controllers.js</code></td>
+<td align="left"><code>getModuleById()</code>, <code>getModuleUnlockedStatus()</code>, <code>unlockModule()</code></td>
+</tr>
+<tr>
+<td align="left"><code>payment-controllers.js</code></td>
+<td align="left"><code>processPayment()</code></td>
+</tr>
+<tr>
+<td align="left"><code>sections-controllers.js</code></td>
+<td align="left"><code>getModuleSectionsById()</code>, <code>getSectionsProgress()</code>, <code>getSectionContent()</code>, <code>markSectionAsCompleted()</code></td>
+</tr>
+<tr>
+<td align="left"><code>users-controllers.js</code></td>
+<td align="left"><code>createUser()</code>, <code>login()</code>, <code>updateUserDetails()</code>, <code>resetPassword()</code>, <code>requestPasswordResetLink()</code></td>
+</tr>
+</tbody>
+</table>
+<div class="card bg-light">
+<div class="card-body">
+<p class="mb-0"><b>Tip:</b> We can use the <code>(req.body)+|(req.params)+</code> regex pattern in the VSCode search panel, and enable the <code>Use Regular Expression</code> option with the ALT+R or CMD+ALT+R shortcut. Furthermore, we can expand the search details and use <code>src/src/controllers</code> in <code>files to include</code> to only search controller functions.</p>
+</div>
+</div>
+<p><img src="https://academy.hackthebox.com/storage/modules/239/vscode_req_param_search.png" alt="vscode_req_param_search.png" /></p>
+<h2>Filtering Out Functions with Input Validation</h2>
+<p>To further reduce our testing scope, let's filter out any functions that apply validation on the user input. If we start with the <code>applyCoupon()</code> function, we see that it only has one user input, which is the <code>coupon</code> code, and it applies a validation test on it before processing it. If it fails, it will return an error:</p>
+<pre><code class="language-js">// validate coupon
+const errors = await validateCouponCode({ coupon });
+if (errors) {
+  return next(errors);
+}
+</code></pre>
+<p>Although validation tests sometimes fail to properly validate user input (e.g., using an insecure regular expression), the validation tests used here seem to be secure. We can CTRL/CMD click on <code>validateCouponCode()</code>, we will be taken to the function, and will see that it uses the <code>CouponCodeSchema</code> and the <code>validate</code> function from the <code>yup</code> package, which ensures that the user input meets all of the requirements specified in the <code>schema</code>.</p>
+<p>This process makes it very solid in performing its validation tests, assuming that the schema itself is well designed, <code>so we can skip all functions that apply these validation tests</code> (at least for now, and if we don't identify anything, we can go back and investigate them further).</p>
+<h2>Filtering Out Functions with ID Verification</h2>
+<p>Let's now continue to the second function in the above list <code>getExamById()</code>. This function simply accepts an exam <code>id</code>, and returns its details. For example, if we visit <code>/api/exams/1</code>, we will get the details of exam <code>1</code> in JSON format, which will then be properly processed and formatted by the front-end and displayed to the user. Even though this function does not perform any input validation on the <code>id</code> parameter, it still verifies this ID by using it to find an exam in the database, and if the ID does not return any matches, it will simply throw a <code>404</code> error to the user:</p>
+<pre><code class="language-js">try {
+  &lt;SNIP&gt;
+  if (!exam) {
+    throw new Error();
+  }
+} catch (err) {
+  return next({
+    message: &quot;Could not find a matching exam with the provided id.&quot;,
+    statusCode: 404,
+  });
+}
+</code></pre>
+<p>So, this means that all <code>id</code> parameters do not need input validation, as long as they have this step to ensure they match a result, so <code>we can filter out those functions as well</code>. Of course, the code can always be vulnerable to injections or may have weak access control (e.g. this API may display private information publicly), but as we mentioned previously in the module, we are not covering these types of vulnerabilities in this module, and will only be focusing on logic bugs. In a real code review exercise, you may want to double-check how the back-end is limiting its access control and how it is sanitizing user input.</p>
+<div class="card bg-light">
+<div class="card-body">
+<p class="mb-0"><b>Exercise:</b> Go ahead and review all of the remaining 16 functions above, and filter out any ones that do apply validation on <code>all</code> of the user input received through GET/POST requests. You can consider any id parameters to be safe, as long as they return an error when no matches are found.</p>
+</div>
+</div>
+<h2>Reviewing Schema Models</h2>
+<p>If we go through all of the remaining functions, we will see that all of them appear to be secure, as they all apply validation tests on all user input, either through <code>schema.validate</code> or by <code>verifying</code> the passed id. We seem to be dealing with a code that is securely coded, so does this mean that this code is secure from <code>unexpected input logic bugs</code>? Once again, not quite!</p>
+<p>While it is an important exercise to filter out seemingly secure functions that apply validations on user input to quickly identify any <code>low hanging fruits</code> that may be easily exploitable, this by no means is the end of the road, as it only targets clearly vulnerable functions. When dealing with sources that have a higher level of security, we can usually (but definitely not always) expect it to have these basic security measures in place, as the developers would likely have coding standards that mandate them.</p>
+<p>So, where do we go next? As mentioned earlier, if we hit a road-block, we will return to those <code>schemas</code> used in the validation tests and investigate them further. So, let's filter the previous list down to only those functions that utilize validation tests. We can do so by searching for <code>.validate(</code> within our code, which should return all schemas being used for validation:</p>
+<ul>
+<li>
+<code>validateCouponCode</code> -&gt; <code>CouponCodeSchema</code>
+</li>
+<li>
+<code>validateCartItemDetails</code> -&gt; <code>CartItemSchema</code>
+</li>
+<li>
+<code>resetPassword</code> -&gt; <code>passwordResetSchema</code>
+</li>
+<li>
+<code>validateUserDetails</code> -&gt; <code>UserSchema</code>
+</li>
+</ul>
+<p>If we cross-search where these are being used, we'll get the following endpoints:</p>
+<table>
+<thead>
+<tr>
+<th align="left"><strong>File</strong></th>
+<th align="left"><strong>Function/Endpoint</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>coupon-controllers.js</code></td>
+<td align="left"><code>applyCoupon()</code></td>
+</tr>
+<tr>
+<td align="left"><code>payment-controllers.js</code></td>
+<td align="left"><code>processPayment()</code></td>
+</tr>
+<tr>
+<td align="left"><code>users-controllers.js</code></td>
+<td align="left"><code>createUser()</code>, <code>login()</code>, <code>updateUserDetails()</code>, <code>resetPassword()</code>, <code>requestPasswordResetLink()</code></td>
+</tr>
+</tbody>
+</table>
+<p>We can once again start with <code>applyCoupon()</code>, CMD/CTRL click on <code>validateCouponCode()</code> to get to the function, and then go to the schema by CMD/CTRL clicking on <code>CouponCodeSchema</code>, and we will see the following schema:</p>
+<pre><code class="language-js">export const CouponCodeSchema = yup.object({
+  // coupon must be an md5 hash of the coupon code
+  coupon: yup
+    .string()
+    .matches(/^[a-f0-9]{32}$/i, &quot;Invalid coupon.&quot;)
+    .required(),
+});
+</code></pre>
+<p>It is important to learn the skill of <code>reviewing validation tests and functions</code> and be able to spot any potential weaknesses where the test may be missing certain cases. This is not exclusive to schema validation, but also applies to any custom validation tests in general, like ones using regex or any other condition. Usually, we are only interested in custom validation tests, and will not be testing external packages or core validation functions, as this would be considered out-of-scope (i.e. tested when reviewing the code of those packages).</p>
+<p>So, the above schema simply requires the input to be a <code>string</code> and match the specified <code>regex</code> expression. For example, sending a number in the JSON request would fail (e.g. <code>{&quot;coupon&quot;: 1}</code>). Furthermore, we can use online regex tools, or the <a href="https://marketplace.visualstudio.com/items?itemName=chrmarti.regex">Regex Previewer</a> VSCode extension to further test the regex expression, but eventually, we will realize that it safely ensures that the passed string matches an md5 hash, as mentioned in the comment above it.</p>
+<p>Continuing with the remaining functions, we see that both <code>exam-controllers.js</code> functions only receive dates as input, and validate their format using <code>isNaN(Date.parse(date))</code>, which after some basic testing and online research appear to be a solid way of validating that the date is in the expected format using a JavaScript built-in function.</p>
+<p>Next, we have the <code>processPayment()</code> function, which uses the <code>validateCartItemDetails()</code> function to validate each <code>item</code> in the <code>items</code> list from the POST request. Checking the validation function, we see that it uses <code>CartItemSchema</code>, which has 4 different parameters. <code>We can shortlist this function for now</code>, and investigate it further later on, so we can move on with the rest without much delay.</p>
+<p>This leaves the five functions from <code>users-controllers.js</code>, all of which deal with user login and user details. These functions mostly use <code>validateUserDetails()</code>, which relies on the <code>UserSchema</code>. Furthermore, the <code>resetPassword()</code> function uses its own custom <code>passwordResetSchema</code> to validate its user input. A quick look at the <code>UserSchema</code> shows that it is quite basic and would be of low priority in our testing. Another quick look at <code>passwordResetSchema</code> shows that it has some custom stuff, so this may be <code>worth shortlisting as well</code> for further investigation.</p>
+<p>So, after searching the entire code base for functions with user input, and then filtering them down based on their input validation tests, we are left with two shortlisted functions: <code>processPayment()</code> and <code>resetPassword()</code>. In the next section, we'll see if we can identify any weaknesses in either of them.</p>
+<div class="mb-5 pwnbox-select-card"></div>
+<div id="screen" style="height: 600px; border: 1px solid;">
+<div class="screenPlaceholder">
+<div class="instanceLoading" style="display: none;">
+<h1 class="text-center" style="margin-top: 270px;"><i class="fa fa-circle-notch fa-spin"></i>
+</h1>
+<div class="text-center">Instance is starting...</div>
+</div>
+<div class="instanceTerminating" style="display: none;">
+<h1 class="text-center" style="margin-top: 270px;"><i class="fa fa-circle-notch fa-spin"></i>
+</h1>
+<div class="text-center">Terminating instance...</div>
+</div>
+<div class="row instanceStart max-width-canvas">
+<div class="col-4"></div>
+<div class="col-4">
+<button class="startInstanceBtn btn btn-success text-light btn-lg btn-block " style="margin-top: 270px;">Start Instance
+</button>
+<p class="text-center mt-2 font-size-13 font-secondary">
+<span class="text-success spawnsLeft">
+<i class="fal fa-infinity"></i>
+</span> / 1 spawns left
+</p>
+</div>
+<div class="col-4"></div>
+</div>
+</div>
+</div>
+<div class="row align-center justify-center my-4">
+<div class="col-5 justify-start">
+<button style="display:none;" target="_blank" class="instance-button fullScreenBtn btn btn-light btn-sm float-left "><i class="fad fa-expand text-success mr-1"></i> &nbsp;Full Screen
+</button>
+<button style="display:none;" class="instance-button terminateInstanceBtn btn btn-light btn-sm ml-2"><i class="fad fa-times text-danger"></i> &nbsp;Terminate
+</button>
+<button style="display:none;" class="instance-button resetInstanceBtn btn btn-light btn-sm ml-1"><i class="fad fa-sync text-warning mr-2"></i> &nbsp;Reset
+</button>
+<div class="btn-group " role="group">
+<button style="display:none;cursor: default;" class="instance-button extendInstanceBtn btn btn-light btn-sm ml-1">Life Left:
+<span class="lifeLeft"></span>m
+</button>
+<button style="display:none;" data-toggle="tooltip" data-title="Extend Life" class=" extendInstanceBtn extendInstanceBtnClicker btn btn-light btn-sm "><i class="fa fa-plus text-success"></i></button>
+</div>
+</div>
+<div id="statusText" class="col-7 justify-end pt-2 pr-2 font-size-small text-right">Waiting to
+start...
+</div>
+</div>
+<div class="card" id="questionsDiv">
+<div class="card-body">
+<div class="row">
+<div class="col-9">
+<h4 class="card-title mt-0 font-size-medium">Optional Exercises</h4>
+<p class="card-title-desc font-size-large font-size-15">
+Challenge your understanding of the Module content and answer the optional
+question(s) below. These are considered supplementary content and are not
+required to complete the Module. You can reveal the answer at any time to check
+your work.
+</p>
+</div>
+</div>
+<div>
+<div>
+<label class="module-question" for="61">Take a look at the &#039;UserSchema&#039;, and try to understand it. How many of its parameters is applying a strict format to the input?</label>
+<div class="row">
+<div class="col-lg-8 mb-4">
+<input class="form-control bg-color-blue-nav" id="exerciseAnswer61" type="text" color="green" placeholder="Submit your answer here..." maxlength="191">
+</div>
+<div class="col-lg-2 mb-4">
+<button class="btn btn-primary btn-block btnAnswerExercise" id="btnAnswerExercise61" data-exercise-id="61">
+<div class="submit-button-text">
+<i class="fad fa-flag-checkered mr-2"></i> Submit
+</div>
+<div class="submit-button-loader mx-4 d-none">
+<i class="fa fa-circle-notch fa-spin"></i>
+</div>
+</button>
+</div>
+<div class="col-lg-2 mb-4">
+<button class="btn btn-outline-warning btn-block" data-toggle="modal" id="answerExerciseBtn61" data-target="#revealExerciseAnswer61"><i class="fad fa-life-ring mr-2"></i> Reveal Answer
+</button>
+</div>
+</div>
+<div class>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="card bg-color-blue-nav" style="margin: 30px 0">
+<div class="card-body">
+<a href="https://academy.hackthebox.com/module/239/section/2595" class="btn btn-light module-button py-2" style="float: left"><i class="fa fa-arrow-alt-left mr-1"></i> Previous</a>
+<form action="https://academy.hackthebox.com/module" method="POST" class="form-inline" id="completeForm" style="float: right">
+<input type="hidden" name="module_id" value="239">
+<input type="hidden" name="page_id" value="11">
+<input type="hidden" name="completed" value="1">
+<p id="completeBtnPoints" class="mb-0 mr-3 font-size-14 font-medium text-white d-none">
++10 Streak pts</p>
+<button id="completeBtn" class="btn btn-outline-success" style="display: none;">
+<div id="complete-button-text">
+<i class="fa fa-check-circle"></i> Mark Complete & Next
+</div>
+<div id="complete-button-loader" class="mx-5 d-none">
+<i class="fa fa-circle-notch fa-spin"></i>
+</div>
+</button>
+</form>
+<a href="https://academy.hackthebox.com/module/239/section/2597" class="btn btn-light ml-2 module-button py-2" style="float: left">Next <i class="ml-1 fa fa-arrow-alt-right"></i></a>
+</div>
+</div>
+</div>
+<div class="col-md-12 col-xl-3 col-xxl-3">
+<div id="table-of-contents">
+<div class="card">
+<div class="card-body bg-color-blue-nav">
+</div>
+</div>
+<div class="card" id="TOC">
+<div class="card-body bg-color-blue-nav">
+<h5 class="card-title font-size-15 mb-4">Table of Contents</h5>
+<h6 class="mt-4 mb-2">Logic Bugs</h6> <a href="https://academy.hackthebox.com/module/239/section/2587" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Introduction to Logic Bugs</span>
+</a>
+<a href="https://academy.hackthebox.com/module/239/section/2588" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Types of Logic Bugs</span>
+</a>
+<a href="https://academy.hackthebox.com/module/239/section/2589" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Module Methodology</span>
+</a>
+<a href="https://academy.hackthebox.com/module/239/section/2590" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Setting Up</span>
+</a>
+<h6 class="mt-4 mb-2">Validation Logic Disparity</h6> <a href="https://academy.hackthebox.com/module/239/section/2591" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Validation Logic Disparity</span>
+</a>
+<a href="https://academy.hackthebox.com/module/239/section/2592" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Code Review - Validation Logic Disparity</span>
+</a>
+<a href="https://academy.hackthebox.com/module/239/section/2593" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Local Testing - Validation Logic Disparity</span>
+</a>
+<a href="https://academy.hackthebox.com/module/239/section/2594" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">PoC and Patching - Validation Logic Disparity</span>
+</a>
+<h6 class="mt-4 mb-2">Unexpected Input</h6> <a href="https://academy.hackthebox.com/module/239/section/2595" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Unexpected Input</span>
+</a>
+<a href="https://academy.hackthebox.com/module/239/section/2596" class="btn   text-primary  btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Code Review - Unexpected Input</span>
+</a>
+<a href="https://academy.hackthebox.com/module/239/section/2597" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Local Testing (Validation) - Unexpected Input</span>
+</a>
+<a href="https://academy.hackthebox.com/module/239/section/2598" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Local Testing (Manipulation) - Unexpected Input</span>
+</a>
+<a href="https://academy.hackthebox.com/module/239/section/2599" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">PoC and Patching - Unexpected Input</span>
+</a>
+<h6 class="mt-4 mb-2">Null Safety</h6> <a href="https://academy.hackthebox.com/module/239/section/2600" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Null Safety</span>
+</a>
+<a href="https://academy.hackthebox.com/module/239/section/2601" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Code Review (Null Variables) - Null Safety</span>
+</a>
+<a href="https://academy.hackthebox.com/module/239/section/2602" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Code Review (Optional Parameters) - Null Safety</span>
+</a>
+<a href="https://academy.hackthebox.com/module/239/section/2603" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Local Testing (Schemas) - Null Safety</span>
+</a>
+<a href="https://academy.hackthebox.com/module/239/section/2605" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Local Testing (functions) - Null Safety</span>
+</a>
+<a href="https://academy.hackthebox.com/module/239/section/2604" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">PoC and Patching - Null Safety</span>
+</a>
+<h6 class="mt-4 mb-2">Avoiding Parameter Logic Bugs</h6> <a href="https://academy.hackthebox.com/module/239/section/2606" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Avoiding Parameter Logic Bugs</span>
+</a>
+<h6 class="mt-4 mb-2">Skill Assessment</h6> <a href="https://academy.hackthebox.com/module/239/section/2607" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Skill Assessment - Parameter Logic Bugs</span>
+</a>
+</div>
+</div>
+<div class="card">
+<div class="card-body bg-color-blue-nav">
+<h5 class="card-title mb-4">My Workstation</h5>
+<div class="row">
+<div class="col-12">
+<div id="sidePreview" style="height: 160px; border: 1px solid #323232; border-radius: 5px; background-color: #0a121c; text-align: center">
+<div class="screenPlaceholder">
+<p class="instanceStart" style="padding-top:70px; letter-spacing: 5px;">
+OFFLINE</p>
+<p class="instanceLoading " style="padding-top:70px; display: none"><i class="fa fa-circle-notch fa-spin"></i> Starting...</p>
+</div>
+</div>
+</div>
+<div class="col-12 mt-2">
+<div class="instanceStart">
+<button class="startInstanceBtn btn btn-success text-light btn-sm mt-2 btn-block module-button py-2  ">
+<i class="fad fa-play-circle text-light"></i> &nbsp;Start Instance
+</button>
+<p class="text-center mt-2 font-size-13 font-secondary">
+<span class="text-success spawnsLeft">
+<i class="fal fa-infinity"></i>
+</span> / 1 spawns left
+</p>
+</div>
+<button style="display:none;" class="fullScreenBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-expand text-success"></i> &nbsp;Interact
+</button>
+<button style="display:none;" class="terminateInstanceBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-times text-danger"></i> &nbsp;Terminate
+</button>
+<button style="display:none;" class="resetInstanceBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-sync text-warning"></i> &nbsp;Reset
+</button>
+<div class="btn-group" role="group">
+<button style="display:none; cursor: default;" class=" extendInstanceBtn btn btn-light btn-sm mt-2 module-button py-2">Life
+Left: <span class="lifeLeft"></span>m
+</button>
+<button style="display:none;" data-toggle="tooltip" data-title="Extend Life" class=" extendInstanceBtn extendInstanceBtnClicker btn btn-light btn-sm mt-2 module-button py-2">
+<i class="fa fa-plus text-success"></i></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="revealExerciseAnswer61" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="revealExerciseAnswer61" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-body">
+<div class="text-center">
+<h5>Are you sure you want to reveal the answer?</h5>
+<br>
+<button class="btn btn-outline-danger reveal-modal" data-toggle="modal" data-target="#answerExercise61" data-exercise-id="61">
+Yes
+</button>
+<button class="btn btn-outline-primary ml-3" data-dismiss="modal">Cancel</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="answerExercise61" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="answerExercise61" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-body">
+<div class="text-center">
+<h5><i class="fad fa-life-ring text-success"></i>&nbsp; Answer</h5>
+<br>
+<h6>3</h6>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="cheatSheetModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="unlockModuleModal" aria-hidden="true">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+<div class="modal-body">
+<div class="text-center text-break">
+<h5><i class="fad fa-file-alt"></i>&nbsp; Cheat Sheet</h5>
+<p>The cheat sheet is a useful command reference for this module.</p>
+</div>
+</div>
+<div class="modal-footer">
+<a class="btn btn-light btn-block" href="https://academy.hackthebox.com/module/cheatsheet/239">Download
+Cheatsheet</a>
+</div>
+</div>
+</div>
+</div>
+<div id="linkDiscordModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="linkDiscordModal" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-header text-center">
+<h5 class="modal-title w-100">Do you need help with this question?</h5>
+</div>
+<div class="modal-body">
+<div class="text-center">
+<img src="/images/icons/discord-alternative.svg" alt="discord icon">
+<p class="mb-1">It looks like you have not linked your Discord account!</p>
+<p>You can receive question guidance via Discord. </p>
+<a href="https://academy.hackthebox.com/account/discord/link" class="btn btn-outline-success btn-block">
+Link your Discord account
+</a>
+</div>
+</div>
+</div>
+</div>
+</div><div id="referralModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="referralModal" aria-hidden="true" data-backdrop="static">
+<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-content">
+<div class="modal-header text-center border-0">
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true"><img src="/images/close.svg" alt="close" /></span>
+</button>
+</div>
+<div class="modal-body">
+<div class="text-center">
+<img src="/images/htb-coin.svg" alt="coin icon" />
+<h1 class="text-white">Refer &amp; Earn</h1>
+<p class="text-secondary font-size-20">
+Refer a Friend, Earn Cubes, Unlock Academy Modules!
+</p>
+<div class="d-flex flex-column">
+<a href="/referral">
+<button type="button" class="btn btn-success btn-invite-friend text-light my-4">
+Invite Friends
+</button>
+</a>
+<button type="button" id="disableReferralModalBtn" onclick="disableModalRedisplay()" class="btn mt-2 mb-3 d-none">
+Don't show it again
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div id="pwnboxSwitchWarningModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="pwnboxSwitchWarningModal" aria-hidden="true" data-backdrop="static">
+<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-content">
+<div class="modal-header text-center">
+<h2 class="d-inline-flex align-items-center text-white"><span class="font-size-18"><i class="far fa-exclamation-triangle text-danger mr-2"></i></span>Warning</h2>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true"><img src="/images/close.svg" alt="close" height="16" width="16" /></span>
+</button>
+</div>
+<div class="modal-body pt-0">
+<div class="text-left">
+<h1 class="text-white"></h1>
+<div class="text-secondary font-size-14 px-2">
+<p>
+The current instance of Pwnbox <span class="font-medium text-white">will be terminated</span> when switching to a new region.
+</p>
+<p>
+<span class="font-medium text-white">All progress you've made will be lost.</span> Do you want to continue?
+</p>
+</div>
+</div>
+</div>
+<div class="modal-footer">
+<button type="button" id="cancelPwnboxSwitchBtn" class="btn cancel-btn px-5">
+Cancel
+</button>
+<button type="button" id="continuePwnboxSwitchBtn" class="btn continue-btn px-5 text-light">
+<span id="continuePwnboxSwitchBtnText">Continue</span>
+<div class="pwnboxSwitchModalLoader spinner-border d-none" role="status">
+<span class="sr-only">Switching VPN...</span>
+</div>
+</button>
+</div>
+</div>
+</div>
+</div><div id="vpnSwitchWarningModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="vpnSwitchWarningModal" aria-hidden="true" data-backdrop="static">
+<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-content">
+<div class="modal-header text-center">
+<h2 class="d-inline-flex align-items-center text-white"><span class="font-size-18"><i class="far fa-exclamation-triangle text-danger mr-2"></i></span>Warning</h2>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true"><img src="/images/close.svg" alt="close" height="16" width="16" /></span>
+</button>
+</div>
+<div class="modal-body pt-0">
+<div class="text-left">
+<h1 class="text-white"></h1>
+<div class="text-secondary font-size-14 px-2">
+<p>
+All VM instances associated with the old VPN Server <span class="font-medium text-white">will be terminated</span> when switching to
+a new VPN server. Existing PwnBox instances
+<span class="font-medium text-white">will automatically switch</span>
+to the new VPN server.
+</p>
+<p>
+<span class="font-medium text-white">All progress you've made, will
+be lost,</span> do you want to continue?
+</p>
+</div>
+</div>
+</div>
+<div class="modal-footer">
+<button type="button" id="cancelVpnSwitchBtn" class="btn cancel-btn px-5">
+Cancel
+</button>
+<button type="button" id="continueVpnSwitchBtn" class="btn continue-btn px-5 text-light">
+<span id="continueVpnSwitchBtnText">Continue</span>
+<div class="vpnSwitchModalLoader spinner-border d-none" role="status">
+<span class="sr-only">Switching VPN...</span>
+</div>
+</button>
+</div>
+</div>
+</div>
+</div><div id="solutionPreferencesModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="solutionPreferencesModal" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content pt-4 pl-4 pr-4 pb-3">
+<div class="modal-header text-center flex-column align-items-center p-0 font-size-18 font-bold">
+<img src="/images/icons/contact-support.svg" alt="contact support icon">
+<h5 class="modal-title w-100 text-white mt-2">Do you need help with this question?</h5>
+</div>
+<div class="modal-body p-0 mt-2 font-size-16">
+<div class="text-center">
+<p class="mb-0">You have the option to enable step-by-step solutions for all questions.</p>
+<p class="mb-0">You can manage this preference at any time through your profile settings.</p>
+</div>
+</div>
+<div class="modal-footer align-items-center justify-content-center p-0 mt-4 gap-12">
+<button class="btn btn-outline-secondary text-white font-medium" onclick="manageWriteupSettings(false)">
+Don't show Solutions
+</button>
+<button class="btn btn-success text-light font-medium" onclick="manageWriteupSettings(true)">
+Activate Solutions
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="streaks-container">
+</div>
+</div>
+<footer class="footer">
+<div class="container-fluid">
+<div class="row">
+<div class="col-sm-6">
+</div>
+<div class="col-sm-6">
+<div class="text-sm-right d-none d-sm-block">
+Powered by &nbsp; <a href="https://www.hackthebox.com" target="_blank"><img style="margin-bottom: 1px;" src="/images/logo-htb.svg" height="20px" alt="Hack The Box logo"></a>
+</div>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</div>
+<script src=./assets/libs/jquery/jquery.min.js"></script>
+<link rel="preload" as="style" href="./css/vue-radial-progress-a171cc18.css" /><link rel="preload" as="style" href="./css/app-50acc8f9.css" /><link rel="modulepreload" href="./css/app-5f3617cc.js" /><link rel="modulepreload" href="./css/lodash-4cdd6148.js" /><link rel="modulepreload" href="./css/vue-pusher-31bd95f4.js" /><link rel="modulepreload" href="./css/vue-markdown-render-a7356682.js" /><link rel="modulepreload" href="./css/vue-router-0fe68d5f.js" /><link rel="modulepreload" href="./css/vuex-6e8de79e.js" /><link rel="modulepreload" href="./css/vue-radial-progress-d8344aff.js" /><link rel="modulepreload" href="./css/popper-cca4b372.js" /><link rel="modulepreload" href="./css/vuejs-countdown-timer-f471a5d0.js" /><link rel="modulepreload" href="./css/vue-screen-2a148c9c.js" /><link rel="modulepreload" href="./css/vue2-perfect-scrollbar-479bab7f.js" /><link rel="modulepreload" href="./css/main-a8876988.js" /><link rel="modulepreload" href="./css/just-detect-adblock-c3d9cfa8.js" /><link rel="modulepreload" href="./css/referral-2770e5b2.js" /><link rel="modulepreload" href="./css/prism-c677b05a.js" /><link rel="modulepreload" href="./css/copyToClipboard-e397ca3e.js" /><link rel="modulepreload" href="./css/detectBrowser-2863cb72.js" /><link rel="modulepreload" href="./css/core-helpers-4b9e6798.js" /><link rel="modulepreload" href="./css/index-e1c804e0.js" /><link rel="stylesheet" href="./css/vue-radial-progress-a171cc18.css" /><link rel="stylesheet" href="./css/app-50acc8f9.css" /><script type="module" src="./css/app-5f3617cc.js"></script><script type="module" src="./css/main-a8876988.js"></script><script type="module" src="./css/referral-2770e5b2.js"></script><script type="module" src="./css/prism-c677b05a.js"></script><script type="module" src="./css/copyToClipboard-e397ca3e.js"></script><script type="module" src="./css/detectBrowser-2863cb72.js"></script><script type="module" src="./css/core-helpers-4b9e6798.js"></script>
+<script src=./assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src=./assets/libs/simplebar/simplebar.min.js"></script>
+<script src=./assets/libs/node-waves/waves.min.js"></script>
+<script src=./assets/libs/toastr/toastr.min.js"></script>
+<script>
+        $(document).ready(function() {
+            const csrfToken = 'mEPihovH3AUDVPXZwiGGTIpt8k6l1SJGEqkDPsXt';
+            const apiToken= 'qY5UHmy7xMgJi9bQEy5dbx8ruhqNytNKjloIp0eAXNLZB1TSkalt6vn8fNBVUm7JJMAuE5lItF9p36m5';
+                
+            initAxios(csrfToken,apiToken);
+        });
+    </script>
+<script type="module">
+    import { register } from ./assets/libs/core-web-components/index.js';
+      register();
+</script>
+<script>
+    let currentBrowser;
+      let isPwnboxActive = false;
+      let isTargetActive = false;
+      let vmCheckTimer;
+      let areSolutionsEnabled = false;
+      
+      window.addEventListener('SpawnedPwnBox', () => {
+          isPwnboxActive = true;
+      }, false);
+
+      window.addEventListener('TerminatedPwnBox', () => {
+          isPwnboxActive = false;
+      }, false);
+
+      setTimeout(() => {
+          currentBrowser = window.detectBrowser();
+      }, 1000);
+
+      const AXIOS_ERROR_HANDLING_MESSAGE = 'Something went wrong, please try again later.';
+
+      
+      $('table').addClass('table table-striped text-left').wrap('<div class="table-responsive"></div>');
+
+      $('.training-module a').attr('target', '_blank').attr('rel', 'noopener nofollow');
+
+      $('.favouriteBtn').click(function () {
+          let id = $(this).data('module-id');
+
+          axios.get('/api/modules/favourite/' + id).then(response => {
+              let data = response.data;
+              if (data.fav === 1) {
+            $(this).removeClass('fa-sharp fa-solid fa-regular').addClass('fa-sharp fa-solid');
+                  toastr['success'](data.message, 'Success');
+              } else {
+            $(this).removeClass('fa-sharp fa-solid fa-regular').addClass('fa-regular');
+                  toastr['success'](data.message, 'Success');
+              }
+          }).catch(err => {
+              toastr['error'](AXIOS_ERROR_HANDLING_MESSAGE, 'Error');
+          });
+      });
+
+      function encode_utf8(string) {
+          return unescape(encodeURIComponent(string));
+      }
+
+      function checkWriteupSettings() {
+        axios.get('/api/v2/user/settings/walkthroughs_enabled').then(response => {
+            areSolutionsEnabled = response.data.data.value;
+        }).catch(error => {
+            toastr['error'](data.message, 'Error');
+        });
+      }
+
+      function manageWriteupSettings(enableWriteupSettings) {
+        axios.put('/api/v2/user/settings/walkthroughs_enabled', {
+            value: enableWriteupSettings
+        }).then(response => {
+            if (response.status === 204) {
+                areSolutionsEnabled = enableWriteupSettings;
+                if (areSolutionsEnabled) {
+                   // refresh page to update UI
+                   window.location.reload();
+                }
+            }
+        }).catch(error => {
+            toastr['error'](error.message, 'Error');
+        }).finally(() => {
+            $('#solutionPreferencesModal').modal('hide');
+        });
+      }
+
+      $('.btnAnswer').click(function () {
+          let question_id = $(this).data('question-id');
+          $(this).attr('disabled', 1);
+          $(this).find('.submit-button-text').addClass('d-none');
+          $(this).find('.submit-button-loader').removeClass('d-none');
+          let utf8EncodedString = encode_utf8($('#answer' + question_id).val());
+          axios.post('/api/check/answer', {
+              answer: btoa(utf8EncodedString),
+              question_id: question_id
+          }).then(response => {
+              let data = response.data;
+              if (data.success === 0) {
+                  $(this).removeAttr('disabled');
+                  
+                  if(data.should_show_walkthrough_modal) {
+                    openSolutionPreferencesModal();
+                  }
+                  
+                  toastr['error'](data.message, 'Error');
+              } else {
+                  $(this).attr('disabled', 1);
+                  $('#answer' + question_id).attr('disabled', 1);
+                  $('#answer' + question_id).addClass('text-success');
+                  $('#hintBtn' + question_id).attr('disabled', 1);
+                  $(`.d-discord-${question_id}`).addClass('d-none');
+                  $('#questionStreakPointsText-' + question_id).addClass('d-none');
+                  toastr['success'](data.message, 'Success');
+                  completeCheck();
+              }
+              $(this).find('.submit-button-text').removeClass('d-none');
+              $(this).find('.submit-button-loader').addClass('d-none');
+          }).catch(err => {
+              toastr['error'](AXIOS_ERROR_HANDLING_MESSAGE, 'Error');
+          });
+      });
+
+      $('.btnAnswerExercise').click(function () {
+          let exercise_id = $(this).data('exercise-id');
+          $(this).attr('disabled', 1);
+          $(this).find('.submit-button-text').addClass('d-none');
+          $(this).find('.submit-button-loader').removeClass('d-none');
+          let utf8EncodedString = encode_utf8($(`#exerciseAnswer${exercise_id}`).val());
+          axios.post(`/api/check/exercise/${exercise_id}/answer`, {
+              answer: btoa(utf8EncodedString)
+          }).then(response => {
+              let data = response.data;
+              if (data.success === 0) {
+                  $(this).removeAttr('disabled');
+                  toastr['error'](data.message, 'Error');
+              } else {
+                  $(this).attr('disabled', 1);
+                  $(`#exerciseAnswer${exercise_id}`).attr('disabled', 1);
+                  $(`#exerciseAnswer${exercise_id}`).addClass('text-success');
+                  toastr['success'](data.message, 'Success');
+              }
+              $(this).find('.submit-button-text').removeClass('d-none');
+              $(this).find('.submit-button-loader').addClass('d-none');
+          }).catch(err => {
+              toastr['error'](AXIOS_ERROR_HANDLING_MESSAGE, 'Error');
+          });
+      });
+
+      $('.btnAnswerExerciseMultiple').click(function () {
+          $(this).attr('disabled', 1);
+          $(this).find('.submit-button-text').addClass('d-none');
+          $(this).find('.submit-button-loader').removeClass('d-none');
+          let exercise_id = $(this).data('exercise-id');
+          $(this).attr('disabled', 1);
+          let utf8EncodedString = $(`#exerciseAnswer${exercise_id}`).find('input:checked').val();
+          axios.post(`/api/check/exercise/${exercise_id}/answer`, {
+              answer: btoa(utf8EncodedString)
+          }).then(response => {
+              let data = response.data;
+              if (data.success === 0) {
+                  $(this).removeAttr('disabled');
+                  toastr['error'](data.message, 'Error');
+                  $(`#exerciseAnswer${exercise_id} input[type=radio]:checked`).parent().parent().find(`.exercise-answer-justification`).removeClass('d-none');
+                  $(`#exerciseAnswer${exercise_id} input[type=radio]:checked`).attr('disabled', 1);
+                  $(`#exerciseAnswer${exercise_id} input[type=radio]:checked`).parent().find('label').addClass('text-danger red');
+              } else {
+                  $(this).attr('disabled', 1);
+                  $(`#exerciseAnswer${exercise_id}`).attr('disabled', 1);
+                  $(`#exerciseAnswer${exercise_id} input[type=radio]:checked`).parent().find('label').addClass('text-success green');
+                  $(`#exerciseAnswer${exercise_id} input[type=radio]:checked`).parent().find('label').removeClass('red');
+                  $(`#exerciseAnswer${exercise_id} input[type=radio]`).attr('disabled', 1);
+                  $(`#exerciseAnswer${exercise_id} .exercise-answer-justification`).removeClass('d-none');
+                  toastr['success'](data.message, 'Success');
+              }
+              $(this).find('.submit-button-text').removeClass('d-none');
+              $(this).find('.submit-button-loader').addClass('d-none');
+          }).catch(err => {
+              toastr['error'](AXIOS_ERROR_HANDLING_MESSAGE, 'Error');
+          });
+      });
+
+      $('.reveal-modal').click(e => {
+          let id = $(e.target).data('exercise-id');
+          $(`#revealExerciseAnswer${id}`).modal('hide');
+      });
+
+      $(document).ready(function () {
+          setTimeout(() => {
+              // we add a delay before calling this function
+              // in order the axios headers to have been set
+              completeCheck();
+              checkWriteupSettings();
+          }, 500);
+          
+          $('pre').filter(function () {
+              return this.className.match(/\blanguage-/);
+          }).each(function () {
+              let heading = $(this).prevAll().closest('h1').last().text();
+
+              if (this.className === ' language-shell-session') {
+                  wrapTerminal(this, heading);
+              } else if (this.className === ' language-powershell-session') {
+                  wrapPSTerminal(this, heading);
+              } else if (this.className === ' language-cmd-session') {
+                  wrapCMDTerminal(this, heading);
+              } else if (this.className.startsWith(' language-')) {
+                  var language = this.className.split('-').pop();
+                  wrapCodeBlock(this, language);
+              }
+          });
+
+          wrapBrowser($('.website-screenshot'));
+
+          $('span:contains(\'[!bash!]\')').html('<span class="text-gray">lmaodedlol@htb</span><span class="text-success">[/htb]</span>');
+
+          let _vpnSelector = $('.vpnSelector');
+          let _selectedServer = _vpnSelector.val();
+          let _vpnLoader = $('.vpn-loader');
+
+          let _vpnSwitchWarningModal = $('#vpnSwitchWarningModal');
+          let _continueVpnSwitchBtn = $('#continueVpnSwitchBtn');
+          let _continueVpnSwitchBtnText = $('#continueVpnSwitchBtnText');
+          let _cancelVpnSwitchBtn = $('#cancelVpnSwitchBtn');
+          let _vpnSwitchWarningModalLoader = $('.vpnSwitchModalLoader');
+
+          _vpnSelector.change(function () {
+              if (isPwnboxActive) {
+                  _vpnSwitchWarningModal.modal('show');
+              } else {
+                  switchVpnServer();
+              }
+          });
+
+          function switchVpnServer() {
+              let vpnId = $('.vpnSelector option:selected').val();
+              if (!vpnId) return;
+
+              _vpnLoader.removeClass('d-none');
+              _vpnLoader.addClass('d-flex');
+              _vpnSelector.addClass('d-none');
+
+              // Display button loader and disable the buttons while
+              // waiting for the request to finish
+              _continueVpnSwitchBtnText.addClass('d-none');
+              _vpnSwitchWarningModalLoader.removeClass('d-none');
+              _continueVpnSwitchBtn.addClass('disabled');
+              _cancelVpnSwitchBtn.addClass('disabled');
+              _vpnSwitchWarningModal.find('.close').addClass('disabled');
+
+              axios.post(`/api/v2/vpn-servers/${vpnId}/switch`, {}).then(response => {
+                  _vpnLoader.removeClass('d-flex');
+                  _vpnLoader.addClass('d-none');
+                  _vpnSelector.removeClass('d-none');
+
+                  toastr['success']('Vpn server switched successfully', 'Success');
+                  $('.startInstanceBtn').each(function () {
+                      $(this).removeClass('disabled');
+                  });
+
+                  _vpnSwitchWarningModal.modal('hide');
+                  _continueVpnSwitchBtnText.removeClass('d-none');
+                  _vpnSwitchWarningModalLoader.addClass('d-none');
+                  _continueVpnSwitchBtn.removeClass('disabled');
+                  _cancelVpnSwitchBtn.removeClass('disabled');
+                  _vpnSwitchWarningModal.find('.close').removeClass('disabled');
+
+                  if (isTargetActive) {
+                      $('.target').html('<i class="fad fa-circle-notch fa-spin"></i> Target is spawning...');
+                      $('.targetIp').html('<i class="fad fa-circle-notch fa-spin"></i>');
+                      $('.resetTargetBtn').hide();
+                      $('.resetTargetBtn').prop('disabled', true);
+
+                      vmCheckTimer = setInterval(function () {
+                          window.checkVMs();
+                      }, 5 * 1000);
+                  }
+
+              }).catch(err => {
+                  clearInterval(vmCheckTimer);
+                  _vpnLoader.removeClass('d-flex');
+                  _vpnLoader.addClass('d-none');
+                  _vpnSelector.removeClass('d-none');
+                  toastr['error'](err.response.data.message, 'Error');
+                  _vpnSelector.val(_selectedServer);
+                  _vpnSwitchWarningModal.modal('hide');
+                  _continueVpnSwitchBtnText.removeClass('d-none');
+                  _vpnSwitchWarningModalLoader.addClass('d-none');
+                  _continueVpnSwitchBtn.removeClass('disabled');
+                  _cancelVpnSwitchBtn.removeClass('disabled');
+                  _vpnSwitchWarningModal.find('.close').removeClass('disabled');
+              });
+          }
+
+          _continueVpnSwitchBtn.on('click', () => {
+              switchVpnServer();
+          });
+
+          _vpnSwitchWarningModal.find('.close').on('click', () => {
+              _vpnSelector.val(_selectedServer);
+              _vpnSwitchWarningModal.modal('hide');
+          });
+
+          _cancelVpnSwitchBtn.on('click', () => {
+              _vpnSelector.val(_selectedServer);
+              _vpnSwitchWarningModal.modal('hide');
+          });
+
+          _vpnSwitchWarningModal.on('hidden.bs.modal', () => {
+              _continueVpnSwitchBtnText.removeClass('d-none');
+              _vpnSwitchWarningModalLoader.addClass('d-none');
+
+              // Reset button state on modal close
+              _continueVpnSwitchBtn.removeClass('disabled');
+              _cancelVpnSwitchBtn.removeClass('disabled');
+              _vpnSwitchWarningModal.find('.close').removeClass('disabled');
+          });
+
+      });
+
+      $('.download-vpn-settings').click(() => {
+          let type = 'regular';
+          let protocol = $('input[name="vpn-protocol"]:checked').val();
+          axios.get(`/api/v2/vpn-servers/key/download?type=${type}&protocol=${protocol}`).then(response => {
+              const url = window.URL.createObjectURL(new Blob([response.data]));
+              const link = document.createElement('a');
+              link.href = url;
+              link.setAttribute('download', `academy-${type}.ovpn`);
+              document.body.appendChild(link);
+              link.click();
+          }).catch(err => {
+              toastr['error'](err.response.data.message, 'Error');
+          });
+      });
+
+      $('#completeBtn').click(() => {
+          $('#completeBtn').addClass('disabled');
+          $('#complete-button-text').addClass('d-none');
+          $('#complete-button-loader').removeClass('d-none');
+      });
+
+      function completeCheck() {
+          axios.get('/api/check/complete/2596').then(response => {
+              let data = response.data;
+              if (data.success === 1) {
+                  if (data.completed === true) {
+                      $('#completeBtn').show();
+                      $('#completeBtnPoints').removeClass('d-none');
+                  }
+              }
+          }).catch(err => {
+              toastr['error'](AXIOS_ERROR_HANDLING_MESSAGE, 'Error');
+          });
+      }
+
+      function wrapTerminal(element, heading) {
+          $(element).css('line-height', '0px');
+          $(element).wrap('<div class="window_content"></div>')
+              .parent().wrap('<div class="window_container"></div>')
+              .prepend(`
+                      <div class='window_top'>
+                          <span class='window_dot bg-danger'></span>
+                          <span class='window_dot bg-warning'></span>
+                          <span class='window_dot bg-success'></span>
+                          <span class='window_title'>${heading}</span>
+                      </div>
+                  `);
+      }
+
+      function wrapPSTerminal(element, heading) {
+          $(element).css('background', '#012456').children().css('color', 'white');
+          $(element).css('line-height', '0px');
+          $(element).wrap('<div class="window_content"></div>')
+              .parent().wrap('<div class="window_container"></div>')
+              .prepend(`
+                      <div class='window_top'>
+                          <span class='window_dot bg-danger'></span>
+                          <span class='window_dot bg-warning'></span>
+                          <span class='window_dot bg-success'></span>
+                          <span class='window_title'>${heading}</span>
+                      </div>
+                  `);
+      }
+
+      function wrapCMDTerminal(element, heading) {
+          $(element).css('background', 'black').children().css('color', 'white');
+          $(element).css('line-height', '0px');
+          $(element).wrap('<div class="window_content"></div>')
+              .parent().wrap('<div class="window_container"></div>')
+              .prepend(`
+                      <div class='window_top'>
+                          <span class='window_dot bg-danger'></span>
+                          <span class='window_dot bg-warning'></span>
+                          <span class='window_dot bg-success'></span>
+                          <span class='window_title'>${heading}</span>
+                      </div>
+                  `);
+      }
+
+      function wrapCodeBlock(element, lang) {
+          $(element).wrap('<div class="window_content"></div>')
+              .parent().wrap('<div class="window_container"></div>')
+              .prepend('<div class="window_top">Code: <span class="text-success">' + lang + '</div>');
+      }
+
+      function wrapBrowserOld(element) {
+          $(element).css('border', '0px').css('border-radius', '0');
+          let url = element.data('url');
+          $(element).wrap('<div class="window_content"></div>')
+              .parent().wrap('<div class="window_container"></div>')
+              .prepend(`
+                      <div class='window_top'>
+                          <span class='window_dot bg-danger'></span>
+                          <span class='window_dot bg-warning'></span>
+                          <span class='window_dot bg-success'></span>
+                          <input type='text' class='website-screenshot-url' disabled value='${url}'>
+                          <span class='float-right'><i class='fa fa-home'></i></span>
+                      </div>
+                  `);
+      }
+
+      function wrapBrowser(element) {
+          $(element).css('border', '0px').css('border-radius', '0');
+
+          $(element).each(function (index, e) {
+              let url = $(e).data('url');
+              $(e).wrap('<div class="window_content"></div>')
+                  .parent().wrap('<div class="window_container"></div>')
+                  .prepend(`
+                          <div class='window_top'>
+                              <span class='mr-2'>
+                                  <i class='fa fa-arrow-circle-left'></i> <i class='fa fa-arrow-right'></i> <i class='fa fa-redo'></i> <i class='fa fa-home'></i>
+                              </span>
+                              <input type='text' class='website-screenshot-url' disabled value='${url}'>
+                              <span class='float-right'><i class='fa fa-bars'></i></span>
+                          </div>
+                      `);
+          });
+      }
+
+      // This one is used by the requestHelpModal
+      function requestHelp() {
+          let question_id = $('#requestHelpModal').data('question_id');
+          axios.post(`/api/question/${question_id}/help`)
+              .then(({ data }) => {
+                  $('#requestHelpModal').modal('hide');
+                  if (data.success == 0) {
+                      toastr['error'](data.message, 'Error');
+                      return;
+                  }
+                  toastr['success']('Request sent!', 'Success');
+              }).catch(err => {
+                  toastr['error'](AXIOS_ERROR_HANDLING_MESSAGE, 'Error');
+              });
+      }
+
+      function openRequestModal(question_id) {
+          $('#requestHelpModal').modal('show').data('question_id', question_id);
+      }
+
+      function openSolutionPreferencesModal() {
+        $('#solutionPreferencesModal').modal('show');
+      };
+
+      function openWalkthroughModal(index, sectionTitle) {
+          let _walkthrougModal = $('#walkthroughModal');
+          const _walkthroughContent = $('#walkthroughModal').find('.training-module');
+          const _walkthroughLoader = $('.walkthrough-loader');
+          _walkthrougModal.modal('show');
+          _walkthrougModal.on('shown.bs.modal', function (event) {
+              const indexNumber = new Number(index);
+
+              _walkthroughLoader.removeClass('d-none');
+              _walkthroughLoader.addClass('d-block');
+
+              let question = `Question ${indexNumber + 1}`;
+              let element = $('h1').filter(function () {
+                  // Filter all the h1 headers, to find the exact section title
+                  return $(this).text().trim().toLowerCase() === sectionTitle.toLowerCase();
+              }).nextAll('h2').filter(function () {
+                  // then filter all the h2 headers, to find the exact question as well
+                  return $(this).text().trim().toLowerCase() === question.toLowerCase();
+              }).first();
+
+              if (element.length) {
+                  setTimeout(() => {
+                      _walkthroughLoader.addClass('d-none');
+                      _walkthroughLoader.removeClass('d-block');
+                      _walkthroughContent.removeClass('d-none');
+
+                      _walkthrougModal.animate({
+                          scrollTop: element.offset().top - _walkthrougModal.offset().top + _walkthrougModal.scrollTop()
+                      }, 500);
+                  }, 1500);
+              } else {
+                  _walkthroughLoader.addClass('d-none');
+                  _walkthroughLoader.removeClass('d-block');
+                  _walkthroughContent.removeClass('d-none');
+              }
+          });
+          _walkthrougModal.on('hidden.bs.modal', function (event) {
+              // Make sure that content gets hidden again
+              // in case the user re-opens the modal multiple times
+              _walkthroughContent.addClass('d-none');
+          });
+      }
+
+      
+      function initStreakToast(autoHideOption = true) {
+          const streakToast = $('#streak-toast');
+          streakToast.toast({ autohide: autoHideOption, delay: 20000 }).toast('show');
+      }
+
+      function initStreaksNotificationContent(streaksTemplate) {
+          return new Promise((resolve, reject) => {
+              const _streaksContainer = $('.streaks-container');
+              _streaksContainer.html(streaksTemplate);
+              resolve();
+          });
+
+      }
+</script>
+<script type="module">
+    import RFB from ./assets/libs/vnc/core/rfb.js';
+
+      let rfb;
+      let sidePreview;
+      let desktopName;
+      let pwnboxActive = false;
+
+      $(document).ready(function () {
+          getRegions();
+          const userId = '1287357';
+          Echo.private(`user-${userId}`)
+              .listen('.streak.completed', data => {
+                  initStreaksNotificationContent(data.streak_popup).then(() => {
+                      initStreakToast();
+                  });
+              })
+              .listen('.streak.progressed', data => {
+                  initStreaksNotificationContent(data.streak_popup).then(() => {
+                      initStreakToast();
+                  });
+              })
+              .listen('.streak.started', data => {
+                  const { event, current_streak } = data.streak_data;
+                  initStreaksNotificationContent(data.streak_popup).then(() => {
+                    const enableToastAutohide = event === 'streak.started' && current_streak === 0 ? false : true;
+                    initStreakToast(enableToastAutohide);
+                  });
+              });
+      });
+
+      function connectedToServer(e) {
+          status('Connected to ' + desktopName);
+          $('.fullScreenBtn').show();
+          $('.resetInstanceBtn').show();
+          $('.terminateInstanceBtn').show();
+          $('.extendInstanceBtn').show();
+          $('.instanceLoading').hide();
+          $('.instanceStart').hide();
+          $('.resetInstanceBtn').prop('disabled', false);
+          $('.fullScreenBtn').prop('disabled', false);
+          $('.extendInstanceBtn').prop('disabled', false);
+          $('.terminateInstanceBtn').prop('disabled', false);
+
+          document.querySelector('canvas').addEventListener('focus', (event) => {
+              if (currentBrowser.firefox) {
+                  window.copyToClipboard(event.target.textContent);
+              } else {
+                  navigator.clipboard.readText()
+                      .then(text => {
+                          writeToClipboard(text);
+                      })
+                      .catch(err => {
+                          console.error('Something went wrong while accessing clipboard', err);
+                      });
+              }
+          });
+      }
+
+      function disconnectedFromServer(e) {
+          status('Disconnected');
+          $('.screenPlaceholder').show();
+          stopCountdown();
+      }
+
+      function clipboardReceived(e) {
+          navigator.clipboard.writeText(e.detail.text)
+              .then(() => {
+                  // Success!
+              })
+              .catch(err => {
+                  console.error('Something went wrong while copying to clipboard.', err);
+              });
+      }
+
+      function updateDesktopName(e) {
+          desktopName = e.detail.name;
+      }
+
+      function status(text) {
+          $('#statusText').html(text);
+      }
+
+      function readQueryVariable(name) {
+          const re = new RegExp('.*[?&]' + name + '=([^&#]*)'),
+              match = document.location.href.match(re);
+
+          if (match) {
+              return decodeURIComponent(match[1]);
+          }
+
+          return null;
+      }
+
+      function writeToClipboard(text) {
+          rfb.clipboardPasteFrom(text);
+      }
+
+      let host = '';
+      let password = '';
+      let countdown = '';
+      let targetCountdown = '';
+      let targetRemainingTimeInSeconds = '';
+      let url = '';
+      let spawnInterval = null;
+
+      function getPwnbox() {
+          return new Promise((resolve, reject) => {
+              axios.get('/api/get/pwnbox').then(response => {
+                  let data = response.data;
+                  if (data.success === 1 && data.instance.status === 'ready') {
+                      host = `proxy-${data.instance.location}.htb-cloud.com/bird/${data.instance.hostname}`;
+                      password = data.instance.password;
+                      $('.lifeLeft').html(data.instance.life_remaining);
+                      startCountdown();
+                      $('.screenPlaceholder').hide();
+                      url = 'https://vnc.htb-cloud.com/index.html?host=' + host + '&password=' + password;
+                      isPwnboxActive = true;
+
+                      if (document.querySelector('wc-htb-pwnbox-selection-card')) {
+                          document.querySelector('wc-htb-pwnbox-selection-card').setAttribute('pwnbox-active', true);
+                      }
+                      connect();
+                      if (spawnInterval !== null) {
+                          clearInterval(spawnInterval);
+                      }
+                      resolve('success getting pwnbox');
+                  } else {
+                      $('.screenPlaceholder').show();
+                  }
+              }).catch(err => {
+                  toastr['error'](AXIOS_ERROR_HANDLING_MESSAGE, 'Error');
+                  reject(err);
+              });
+          });
+      }
+
+                function extendPwnbox() {
+              axios.get('/api/extend/pwnbox').then(response => {
+                  let data = response.data;
+                  if (data.success === 1) {
+                      $('.lifeLeft').html(data.instance.life_remaining);
+                      stopCountdown().then(() => {
+                          startCountdown();
+                          toastr['success']('Time extended for 60 minutes.', 'Success');
+                      });
+                  } else {
+                      toastr['error'](data.message, 'Error');
+                  }
+
+              }).catch(err => {
+                  toastr['error'](AXIOS_ERROR_HANDLING_MESSAGE, 'Error');
+              });
+          }
+
+      
+      function initStartCountdown() {
+          let life = parseInt($('.lifeLeft').html()) - 1;
+          $('.lifeLeft').html(life);
+      }
+
+      function startCountdown() {
+          countdown = setInterval(function () {
+              initStartCountdown();
+          }, 60 * 1000);
+      }
+
+      function stopCountdown() {
+          return new Promise((resolve) => {
+              clearInterval(countdown);
+              resolve();
+          });
+      }
+
+      function terminatePwnbox() {
+          return new Promise((resolve, reject) => {
+              $('.resetInstanceBtn').prop('disabled', true);
+              $('.terminateInstanceBtn').prop('disabled', true);
+              $('.fullScreenBtn').prop('disabled', true);
+              $('.extendInstanceBtn').prop('disabled', true);
+              $('.instanceStart').hide();
+
+              $('.instanceTerminating').show();
+
+              status('Terminating Interactive Instance...');
+
+              axios.delete('/api/terminate/pwnbox')
+                  .then(({ data }) => {
+                      if (data.success === 1) {
+                          $('.startInstanceBtn').show();
+                          $('.instanceStart').show();
+                          $('.instanceTerminating').hide();
+                          $('.resetInstanceBtn').hide();
+                          $('.terminateInstanceBtn').hide();
+                          $('.fullScreenBtn').hide();
+                          $('.extendInstanceBtn').hide();
+
+                          isPwnboxActive = false;
+
+                          $('.iterminal').addClass('d-none');
+
+                          toastr['success']('Instance has been terminated.', 'Success');
+
+                          /**
+                           *  Dispatch an event when pwnBox is terminated
+                           */
+                          var terminatePwnBoxEvent = new CustomEvent('TerminatedPwnBox');
+                          window.dispatchEvent(terminatePwnBoxEvent);
+
+                          resolve('succes terminating pwnbox');
+
+                      } else {
+                          toastr['error'](data.message, 'Error');
+                          connect();
+                          $('.resetInstanceBtn').prop('disabled', false);
+                          $('.fullScreenBtn').prop('disabled', false);
+                          $('.extendInstanceBtn').prop('disabled', false);
+                          $('.terminateInstanceBtn').prop('disabled', false);
+                      }
+                  }).catch(err => {
+                      reject(err);
+                      toastr['error'](AXIOS_ERROR_HANDLING_MESSAGE, 'Error');
+                  });
+          }).catch(error => {
+              reject(error);
+          });
+      }
+
+      let _wcPwnbox = document.querySelector('wc-htb-pwnbox-selection-card');
+
+      function errorHandling(value) {
+          switchToRegion = value.detail[0];
+          _pwnboxSwitchWarningModal.modal('show');
+      }
+
+      function getSelectedPwnboxLocation(event) {
+          if (pwnboxActive) {
+              selectedPwnBoxLocation = currentPwnboxLocation;
+              return;
+          }
+          selectedPwnboxLocation = event.detail[0];
+      }
+
+      function getCurrentPwnboxLocation(server) {
+          currentPwnboxLocation = server;
+      }
+
+      function setCurrentPwnboxServer(server) {
+          _wcPwnbox.setAttribute('current-pwnbox', server);
+      }
+
+      let selectedPwnboxLocation;
+      let currentPwnboxLocation;
+      let switchToRegion;
+
+      let pwnboxRegions;
+
+      let _pwnboxSwitchWarningModal = $('#pwnboxSwitchWarningModal');
+      let _cancelPwnboxSwitchBtn = $('#cancelPwnboxSwitchBtn');
+      let _continuePwnboxSwitchBtn = $('#continuePwnboxSwitchBtn');
+      let _continuePwnboxSwitchBtnText = $('#continuePwnboxSwitchBtnText');
+      let _pwnboxSwitchModalLoader = $('.pwnboxSwitchModalLoader');
+
+      _cancelPwnboxSwitchBtn.on('click', () => {
+          initWcPwnbox(pwnboxRegions);
+          _pwnboxSwitchWarningModal.modal('hide');
+      });
+
+      _continuePwnboxSwitchBtn.on('click', () => {
+          _continuePwnboxSwitchBtnText.addClass('d-none');
+          _pwnboxSwitchModalLoader.removeClass('d-none');
+          _continuePwnboxSwitchBtn.addClass('disabled');
+          _cancelPwnboxSwitchBtn.addClass('disabled');
+
+          let oldCurrentPwnbox = selectedPwnboxLocation = currentPwnboxLocation = switchToRegion;
+
+          $('.screenPlaceholder').show();
+          $('.instanceStart').show();
+                        rfb.disconnect();
+                    sidePreview.disconnect();
+          terminatePwnbox().then(() => {
+
+              startPwnbox().then(() => {
+                  _pwnboxSwitchWarningModal.modal('hide');
+                  _continuePwnboxSwitchBtnText.removeClass('d-none');
+                  _pwnboxSwitchModalLoader.addClass('d-none');
+                  _continuePwnboxSwitchBtn.removeClass('disabled');
+                  _cancelPwnboxSwitchBtn.removeClass('disabled');
+                  initWcPwnbox(pwnboxRegions);
+              }).catch(() => {
+                  _pwnboxSwitchWarningModal.modal('hide');
+                  _continuePwnboxSwitchBtnText.removeClass('d-none');
+                  _pwnboxSwitchModalLoader.addClass('d-none');
+                  _continuePwnboxSwitchBtn.removeClass('disabled');
+                  _cancelPwnboxSwitchBtn.removeClass('disabled');
+                  initWcPwnbox(pwnboxRegions);
+              });
+          }).catch(error => {
+              toastr['error'](error.message, 'Error');
+              currentPwnboxLocation = oldCurrentPwnbox;
+              initWcPwnbox(pwnboxRegions);
+          });
+      });
+
+      function initWcPwnbox(regions) {
+          /**
+           *  Creates pwnbox server select component
+           */
+          const pwnboxSelector = document.createElement('wc-htb-pwnbox-selection-card');
+          pwnboxSelector.setAttribute('regions', JSON.stringify(regions));
+          pwnboxSelector.setAttribute('current-pwnbox', JSON.stringify(currentPwnboxLocation));
+
+          $('.pwnbox-select-card').html(pwnboxSelector);
+          pwnboxSelector.addEventListener('getSelectedPwnboxLocation', getSelectedPwnboxLocation);
+          pwnboxSelector.addEventListener('actionNotAllowed', errorHandling);
+          selectedPwnboxLocation = currentPwnboxLocation;
+
+          if (isPwnboxActive) document.querySelector('wc-htb-pwnbox-selection-card').setAttribute('pwnbox-active', true);
+      }
+
+      function getRegions() {
+          axios.get('/api/v2/pwnbox/regions').then(response => {
+              const data = response.data.data;
+              currentPwnboxLocation = response.data.meta.currentRegion;
+              const regions = [];
+
+              const latencyPromises = data.map((region) => {
+                  const item = { name: region.title, value: region.value };
+                  // Use Promise.resolve to ensure each iteration of the loop returns a Promise
+                  return Promise.resolve()
+                      .then(() => getServerLatency(region.proxyLatencyURL))
+                      .then((response) => {
+                          item.latency = response;
+                          regions.push(item);
+                      });
+              });
+
+              pwnboxRegions = regions;
+
+              Promise.all(latencyPromises).then(() => {
+                  // This code will run after all the getServerLatency calls have completed
+
+                  initWcPwnbox(regions);
+                  /**
+                   * getting pwnbox status and setting isPwnboxActive flag
+                   * if isPwnboxActive is true we are passing the respective attribute to the web component
+                   */
+                  getPwnbox().then(() => {
+                      if (isPwnboxActive) {
+                          document.querySelector('wc-htb-pwnbox-selection-card').setAttribute('pwnbox-active', true);
+                      }
+                  });
+              })
+                  .catch((error) => {
+                      // Handle any errors that occurred during the Promise.all chain
+                      console.error('An error occurred:', error);
+                  });
+
+          }).catch(err => {
+              toastr['error'](AXIOS_ERROR_HANDLING_MESSAGE, 'Error');
+          });
+      }
+
+      function startPwnbox() {
+          return new Promise((resolve, reject) => {
+
+              $('.resetInstanceBtn').prop('disabled', true);
+              $('.fullScreenBtn').prop('disabled', true);
+              $('.extendInstanceBtn').prop('disabled', true);
+              $('.terminateInstanceBtn').prop('disabled', true);
+              $('.instanceStart').hide();
+              $('.instanceLoading').show();
+              $('.startInstanceBtn').hide();
+
+              status('Starting Interactive Instance...');
+
+              grecaptcha.ready(function () {
+                  grecaptcha.execute('6LeI6LsaAAAAAKgdStgBC6B4UVbXlpYNaYGN46Ah', { action: 'spawnPwnbox' }).then(function (token) {
+                      if (token) {
+                          axios.get(`/api/spawn/pwnbox?g-recaptcha-response=${token}&region=${selectedPwnboxLocation.value}`).then(response => {
+                              let data = response.data;
+                              if (data.success === 1) {
+                                  spawnInterval = setInterval(() => {
+                                      getPwnbox();
+                                  }, 2000);
+                              } else {
+                                  if (data.code === 1 || (data.code === 3 && isPwnboxActive)) {
+                                      $('.resetInstanceBtn').prop('disabled', false);
+                                      $('.fullScreenBtn').prop('disabled', false);
+                                      $('.extendInstanceBtn').prop('disabled', false);
+                                      $('.terminateInstanceBtn').prop('disabled', false);
+                                      connect();
+
+                                      if (data.code === 3) {
+                                          $('.instanceLoading').hide();
+                                          startCountdown();
+                                      }
+                                  } else {
+                                      $('.startInstanceBtn').show();
+                                      $('.instanceStart').show();
+                                      $('.instanceLoading').hide();
+                                  }
+
+                                  toastr['error'](data.message, 'Error');
+                              }
+                              resolve('success start pwnbox');
+                          }).catch(err => {
+                              toastr['error'](AXIOS_ERROR_HANDLING_MESSAGE, 'Error');
+                          });
+                      } else {
+                          $('.resetInstanceBtn').prop('disabled', false);
+                          $('.fullScreenBtn').prop('disabled', false);
+                          $('.extendInstanceBtn').prop('disabled', false);
+                          $('.terminateInstanceBtn').prop('disabled', false);
+                          $('.instanceStart').show();
+                          $('.instanceLoading').hide();
+                          $('.startInstanceBtn').show();
+                      }
+                  });
+              });
+          }).catch(error => {
+              reject(error);
+          });
+      }
+
+      $('.fullScreenBtn').click(function () {
+          window.open(url, '_blank');
+      });
+
+      $('.startInstanceBtn').click(function () {
+          if (!selectedPwnboxLocation?.value) {
+              toastr['warning']('Please select Pwnbox server', 'Warning');
+              return;
+          }
+          startPwnbox(selectedPwnboxLocation.value);
+      });
+
+      $('.resetInstanceBtn').click(function () {
+          $('.screenPlaceholder').show();
+          $('.instanceStart').show();
+                        rfb.disconnect();
+              $('.iterminal').addClass('d-none');
+              // This event is dispatched when the pwnbox is terminated and it is catched on the Terminal component
+              // to set the pwnboxStatus to null
+              let terminatePwnBoxEvent = new CustomEvent('TerminatedPwnBox');
+              window.dispatchEvent(terminatePwnBoxEvent);
+                    sidePreview.disconnect();
+          startPwnbox(selectedPwnboxLocation.value);
+      });
+
+      $('.terminateInstanceBtn').click(function () {
+          $('.screenPlaceholder').show();
+          $('.instanceStart').show();
+                        rfb.disconnect();
+                    sidePreview.disconnect();
+          terminatePwnbox();
+      });
+
+      $('.extendInstanceBtnClicker').click(function () {
+          extendPwnbox();
+      });
+
+      $('.resetTargetBtn').click(function () {
+          $('.resetTargetBtn').prop('disabled', true);
+          stopTargetCountdown().then(()=>{
+                                  });
+      });
+
+      
+      function connect() {
+          status('Connecting to ' + host.split('/')[2] + '...');
+
+                        rfb = new RFB(document.getElementById('screen'), 'wss://' + host,
+                  { credentials: { password: password } });
+          //Listeners
+          rfb.addEventListener('desktopname', updateDesktopName);
+          rfb.addEventListener('clipboard', clipboardReceived);
+
+          rfb.resizeSession = true;
+          rfb.viewOnly = false;
+          
+          sidePreview = new RFB(document.getElementById('sidePreview'), 'wss://' + host,
+              { credentials: { password: password } });
+
+          sidePreview.addEventListener('connect', connectedToServer);
+          sidePreview.addEventListener('disconnect', disconnectedFromServer);
+
+          sidePreview.resizeSession = false;
+          sidePreview.viewOnly = true;
+          sidePreview.scaleViewport = true;
+
+          /**
+           *  Dispatch an event when pwnBox is spawned
+           */
+          var spawnedPwnBoxEvent = new CustomEvent('SpawnedPwnBox');
+          window.dispatchEvent(spawnedPwnBoxEvent);
+      }
+
+      $('.target, .targetIp').click(e => {
+          if ($('.resetTargetBtn').is(':hidden')) return;
+          navigator.clipboard.writeText($(e.target).html())
+              .then(() => {
+                  toastr['success']('Target copied to clipboard', 'Success');
+              })
+              .catch(err => {
+                  console.log('Something went wrong while copying to clipboard.', err);
+              });
+      });
+
+            
+      
+      function calculateTimeLeftInMinutes() {
+          if (targetRemainingTimeInSeconds === null) {
+            return 0;
+          }
+          targetRemainingTimeInSeconds -= 1;
+          return Math.ceil(targetRemainingTimeInSeconds/60);
+      }
+
+      function initializeTimeLeft(remainingTime){
+        targetRemainingTimeInSeconds = remainingTime;
+        renderLifeTimeLeft();
+      }
+
+      function renderLifeTimeLeft() {
+        let life = calculateTimeLeftInMinutes();
+        
+        if (life <= 0) {
+          $('.targetLifeTimeContainer').hide();
+          clearInterval(targetCountdown);
+          resetSpawnTargetSystemText();
+        } else {
+          $('.targetLifeTime').html(life);
+        }
+      }
+
+      function startTargetCountdown() {
+          targetCountdown = setInterval(function() {
+            renderLifeTimeLeft();
+          }, 1000);
+      }
+
+      function stopTargetCountdown() {
+          return new Promise((resolve) => {
+              clearInterval(targetCountdown);
+              resolve();
+          });
+      }
+
+      function resetSpawnTargetSystemText() {
+          $('.resetTargetBtn').prop('disabled', true);
+          $('.resetTargetBtn').hide();
+          $('.targetIp').html("");
+          $('.targetLifeTimeContainer').hide();
+          $('.target').html('<span class="spawnTargetBtn" style="cursor:pointer;">Click here to spawn the target system!</span>');
+      }
+</script>
+</body>
+</html>

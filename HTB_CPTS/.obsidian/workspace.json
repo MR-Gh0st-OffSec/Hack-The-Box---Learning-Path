@@ -1,0 +1,177 @@
+{
+  "main": {
+    "id": "62605412ae2ed31b",
+    "type": "split",
+    "children": [
+      {
+        "id": "e0813ebf7a4ab9b5",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0ae3fd8539108538",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Machines/laboratory.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "4ee6a64cd0876fe4",
+    "type": "split",
+    "children": [
+      {
+        "id": "497fc2ea704c55e5",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "88c881ac813d055a",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "8b39a1b9538d56bf",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "fe2ab3fffb92c687",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 384.5
+  },
+  "right": {
+    "id": "ede7345e7a0d87df",
+    "type": "split",
+    "children": [
+      {
+        "id": "33000ca6523d94d7",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6015b3ac26458b75",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Machines/laboratory.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "fa109c6b10ae3bc1",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Machines/laboratory.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "c593c634a9bafd21",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "9b83ee2184c801e4",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Machines/laboratory.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "0ae3fd8539108538",
+  "lastOpenFiles": [
+    "Machines/RedPanda/images/greg.jpg",
+    "Academy/01. Pre-Engagement/01b. Setting Up/Setting Up.md",
+    "Academy/01. Pre-Engagement/01. Learning Process/Learning Process.md",
+    "Academy/01. Pre-Engagement/01. Learning Process/images/TrolleyProblem.png",
+    "Academy/00. Intro to Academy/Intro to Academy.md",
+    "Academy/01. Pre-Engagement/01a. Penetration Testing Process/Penetration Testing Process.md",
+    "Academy/01. Pre-Engagement/01. Learning Process/images/find6.png",
+    "Academy/01. Pre-Engagement/01. Learning Process/images/find5.png",
+    "Academy/01. Pre-Engagement/01. Learning Process/images/find4.png",
+    "Academy/01. Pre-Engagement/01. Learning Process/images/find3.png",
+    "Academy/01. Pre-Engagement/01. Learning Process/images/find2.png",
+    "Academy/01. Pre-Engagement/01. Learning Process/images/find0.png",
+    "Academy/01. Pre-Engagement/01. Learning Process/images/apache-default.png",
+    "Academy/01. Pre-Engagement/01. Learning Process/images/1920px-Trolley_Problem.png",
+    "Academy/01. Pre-Engagement/02. Linux Fundamentals/Linux Fundamentals.md",
+    "Academy/01. Pre-Engagement/04. Introduction to Networking/Introduction to Networking.md",
+    "Academy/01. Pre-Engagement/03a. Introduction to Windows Command Line/Introduction to Windows Command Line.md",
+    "Academy/01. Pre-Engagement/03. Windows Fundamentals/Windows Fundamentals.md",
+    "Academy/01. Pre-Engagement/03. Windows Fundamentals/images/ConnectingwithXfreerdp.png",
+    "Untitled",
+    "Untitled.canvas",
+    "HTB.md",
+    "Pro Labs/dante.md",
+    "Academy/02. Information Gathering/10. Network Enumeration with Nmap/Network Enumeration with Nmap.md",
+    "Academy/01. Pre-Engagement/08. Introduction to Active Directory/Introduction to Active Directory.md"
+  ]
+}
